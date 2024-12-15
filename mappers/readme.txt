@@ -16,4 +16,4 @@ Value 0xFF means that mapper is not supported.
 Last reccord reserved for OS, always should be 0xff
 
 Begins from firmware V2.15 *.rbf file can be simply stored along with rom in same folder,
-so no need to put it in system folder and modify MAPROUT.BIN anymore
+so no need to put it to the system folder and modify MAPROUT.BIN anymore
