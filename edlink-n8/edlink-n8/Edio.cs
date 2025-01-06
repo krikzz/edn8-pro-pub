@@ -87,8 +87,17 @@ namespace edlink_n8
 
         public void print()
         {
-            Console.WriteLine("RTC date: " + dom.ToString("X2") + "." + mon.ToString("X2") + ".20" + yar.ToString("X2"));
-            Console.WriteLine("RTC time: " + hur.ToString("X2") + ":" + min.ToString("X2") + ":" + sec.ToString("X2"));
+            print("RTC");
+        }
+
+        public void print(string label)
+        {
+            if (label.Length > 0)
+            {
+                label += " ";
+            }
+            Console.WriteLine(label + "date: " + dom.ToString("X2") + "." + mon.ToString("X2") + ".20" + yar.ToString("X2"));
+            Console.WriteLine(label + "time: " + hur.ToString("X2") + ":" + min.ToString("X2") + ":" + sec.ToString("X2"));
         }
 
     }
@@ -113,8 +122,8 @@ namespace edlink_n8
         public const int SIZE_CHR = 0x800000;
         public const int SIZE_SRM = 0x40000;
 
-        public const int ADDR_OS_PRG = (ADDR_PRG + 0x7E0000);
-        public const int ADDR_OS_CHR = (ADDR_CHR + 0x7E0000);
+        public const int ADDR_MENU_PRG = (ADDR_PRG + 0x7E0000);
+        public const int ADDR_MENU_CHR = (ADDR_CHR + 0x7E0000);
 
         public const byte FAT_READ = 0x01;
         public const byte FAT_WRITE = 0x02;
@@ -142,7 +151,7 @@ namespace edlink_n8
         const byte CMD_FPG_USB = 0x1E;
         const byte CMD_FPG_SDC = 0x1F;
         const byte CMD_FPG_FLA = 0x20;
-        const byte CMD_FPG_CFG = 0x21;
+        const byte CMD_RTC_CAL = 0x21;
         const byte CMD_USB_WR = 0x22;
         const byte CMD_FIFO_WR = 0x23;
         const byte CMD_UART_WR = 0x24;
@@ -257,7 +266,7 @@ namespace edlink_n8
             txData(buff, 0, buff.Length);
         }
 
-        int rx32()
+        public int rx32()
         {
             byte[] buff = new byte[4];
             rxData(buff, 0, buff.Length);
@@ -355,7 +364,7 @@ namespace edlink_n8
             return buff;
         }
 
-        void rxData(byte []buff, int len)
+        public void rxData(byte []buff, int len)
         {
             rxData(buff, 0, len);
         }
@@ -652,6 +661,12 @@ namespace edlink_n8
             memWR(ADDR_FIFO, data, offset, len);
         }
 
+        public void fifoWR(string str)
+        {
+            byte[] bytes = Encoding.ASCII.GetBytes(str);
+            memWR(ADDR_FIFO, bytes, 0, bytes.Length);
+        }
+
         public void memSet(byte val, int addr, int len)
         {
             txCMD(CMD_MEM_SET);
@@ -727,19 +742,25 @@ namespace edlink_n8
             tx32(data.Length);
             txDataACK(data, 0, data.Length);
             checkStatus();
-            if (cfg != null) memWR(ADDR_CFG, cfg.getBinary(), 0, cfg.getBinary().Length);
+            if (cfg != null)
+            {
+                memWR(ADDR_CFG, cfg.getBinary(), 0, cfg.getBinary().Length);
+            }
         }
 
 
-        public void fpgInit(int flash_addr, MapConfig cfg)
+        public void fpgInit(int flash_addr, int size, MapConfig cfg)
         {
-            //if (cfg != null) fpgInitCfg(cfg);
+            //does not work with early firmware versions
             txCMD(CMD_FPG_FLA);
             tx32(flash_addr);
-            //txData(cfg.getBinary());
+            tx32(size);
             tx8(0);//exec
             checkStatus();
-            if (cfg != null) memWR(ADDR_CFG, cfg.getBinary(), 0, cfg.getBinary().Length);
+            if (cfg != null)
+            {
+                memWR(ADDR_CFG, cfg.getBinary(), 0, cfg.getBinary().Length);
+            }
         }
 
         public void fpgInit(string sd_path, MapConfig cfg)
@@ -753,7 +774,10 @@ namespace edlink_n8
             //txData(cfg.getBinary());
             tx8(0);
             checkStatus();
-            if (cfg != null) memWR(ADDR_CFG, cfg.getBinary(), 0, cfg.getBinary().Length);
+            if (cfg != null)
+            {
+                memWR(ADDR_CFG, cfg.getBinary(), 0, cfg.getBinary().Length);
+            }
         }
 
         /*
@@ -810,6 +834,13 @@ namespace edlink_n8
             txData(vals);
         }
 
+        public void updExec(int addr, int crc)
+        {
+            txCMD(CMD_UPD_EXEC);
+            tx32(addr);
+            tx32(crc);
+            tx8(0);//exec
+        }
         //************************************************************************************************ usb service mode. System enters in service mode if cart powered via usb only
         public void recovery()
         {
@@ -890,7 +921,17 @@ namespace edlink_n8
             throw new Exception("boot timeout");
         }
 
-       
+        public int rtcCal(DateTime dt, byte arg)
+        {
+            RtcTime rtc = new RtcTime(dt);
+            byte[] vals = rtc.getVals();
+            txCMD(CMD_RTC_CAL);
+            txData(vals);
+            tx8(arg);
+
+            return rx32();
+        }
+
 
     }
 }

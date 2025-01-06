@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 
 namespace edlink_n8
@@ -16,62 +13,14 @@ namespace edlink_n8
         const char cmd_halt = 'h';
         const char cmd_sel_game = 'n';
         const char cmd_run_game = 's';
-        
+
 
         public Usbio(Edio edio)
         {
             this.edio = edio;
         }
 
-        public void loadGame_new(string rom_path, string map_path)
-        {
-            string usb_dir = "usb_games";
-
-            edio.dirMake(usb_dir);
-
-            usb_dir += "/" + Path.GetFileName(rom_path);
-            //Console.WriteLine("path: " + usb_dir);
-
-
-            byte[] rom_data = File.ReadAllBytes(rom_path);
-            edio.dirMake(usb_dir);
-            string rom_dst = usb_dir + "/" + Path.GetFileName(rom_path);
-            edio.fileOpen(rom_dst, Edio.FAT_WRITE | Edio.FAT_CREATE_ALWAYS);
-            edio.fileWrite(rom_data, 0, rom_data.Length);
-            edio.fileClose();
-
-            int map_idx =  selectGame(rom_dst);
-
-            if (map_path == null)
-            {
-                map_path = getTestMapper(map_idx);
-            }
-            Console.WriteLine("mapper path: " + map_path);
-
-            string rbf_dst = Path.ChangeExtension(rom_dst, "rbf");
-
-            if (map_path != null)
-            {
-                byte[] rbf_data = File.ReadAllBytes(map_path);
-                edio.fileOpen(rbf_dst, Edio.FAT_WRITE | Edio.FAT_CREATE_ALWAYS);
-                edio.fileWrite(rbf_data, 0, rbf_data.Length);
-                edio.fileClose();
-            }
-            else
-            {
-                try
-                {
-                    //remove mapper file if exist in order to use regular system mapper
-                    edio.delRecord(rbf_dst);
-                }
-                catch (Exception) { }
-            }
-
-            //selectGame(rom_dst);//refresh mapper config
-            cmd(cmd_run_game);
-        }
-
-        int selectGame(string path)
+        public int appInstall(string path)
         {
             int resp;
             cmd(cmd_sel_game);
@@ -79,91 +28,16 @@ namespace edlink_n8
             resp = edio.rx8();//game select status
             if (resp != 0)
             {
-                throw new Exception("Game select error 0x: " + resp.ToString("X2"));
+                throw new Exception("Game select error 0x" + resp.ToString("X2"));
             }
 
             int map_idx = edio.rx16();
             return map_idx;
         }
 
-        public void loadGame_old(NesRom rom, string map_path)
+        public void appStart()
         {
-
-            int resp;
-   
-            byte[] id_bin = rom.getRomID();
-            byte[] prg = rom.PrgData;
-            byte[] chr = rom.ChrData;
-
-            cmd(cmd_sel_game);
-            txString("USB:" + Path.GetFileName(rom.Name));
-            resp = edio.rx8();//system ready to receive id
-            edio.fifoWR(id_bin, 0, id_bin.Length);
-            resp = edio.rx8();
-            if (resp != 0)
-            {
-                throw new Exception("Game select error 0x: " + resp.ToString("X2"));
-            }
-            int map_idx = edio.rx16();
-
-            if (map_idx != rom.Mapper)
-            {
-                Console.WriteLine("map reloc: " + map_idx);
-            }
-            if (map_path == null)
-            {
-                map_path = getTestMapper(map_idx);
-            }
-
             cmd(cmd_run_game);
-            edio.rx8();//exec
-
-            edio.memWR(rom.PrgAddr, prg, 0, prg.Length);
-            edio.memWR(rom.ChrAddr, chr, 0, chr.Length);
-
-            if (map_path == null)
-            {
-                mapLoadSDC(map_idx, null);
-            }
-            else
-            {
-                Console.WriteLine("ext mapper: " + map_path);
-                edio.fpgInit(File.ReadAllBytes(map_path), null);
-            }
-            
-        }
-
-        public void loadOS(NesRom rom, string map_path)
-        {
-            if (map_path == null)
-            {
-                map_path = getTestMapper(255);
-            }
-
-            byte[] prg = rom.PrgData;
-            byte[] chr = rom.ChrData;
-            MapConfig cfg = new MapConfig();
-            cfg.map_idx = 0xff;
-            cfg.Ctrl = MapConfig.ctrl_unlock;
-            
-            cmd(cmd_reboot);
-            edio.rx8();//exec
-   
-            edio.memWR(rom.PrgAddr, prg, 0, prg.Length);
-            edio.memWR(rom.ChrAddr, chr, 0, chr.Length);
-
-            edio.getStatus();
-
-            if (map_path == null)
-            {
-                mapLoadSDC(255, cfg);
-            }
-            else
-            {
-                byte[] map = File.ReadAllBytes(map_path);
-                edio.fpgInit(map, cfg);
-            }
-
         }
 
         void copyFolder(string src, string dst)
@@ -173,7 +47,7 @@ namespace edlink_n8
 
             string[] dirs = Directory.GetDirectories(src);
 
-            for (int i = 0;i < dirs.Length; i++)
+            for (int i = 0; i < dirs.Length; i++)
             {
                 copyFolder(dirs[i], dst + Path.GetFileName(dirs[i]));
             }
@@ -194,7 +68,7 @@ namespace edlink_n8
             src = src.Trim();
             dst = dst.Trim();
 
-            if (!src.ToLower().StartsWith("sd:") && File.GetAttributes(src).HasFlag(FileAttributes.Directory))
+            if (File.GetAttributes(src).HasFlag(FileAttributes.Directory))
             {
                 copyFolder(src, dst);
                 return;
@@ -221,6 +95,12 @@ namespace edlink_n8
                 src_data = File.ReadAllBytes(src);
             }
 
+            /*
+            if (src_data.Length > Edio.MAX_ROM_SIZE)
+            {
+                throw new Exception("File is too big");
+            }*/
+
 
             if (dst.ToLower().StartsWith("sd:"))
             {
@@ -233,6 +113,7 @@ namespace edlink_n8
             {
                 File.WriteAllBytes(dst, src_data);
             }
+
         }
 
         public void makeDir(string path)
@@ -264,24 +145,8 @@ namespace edlink_n8
             edio.fifoWR(bytes, 0, bytes.Length);
         }
 
-        void halt()
-        {
-            MapConfig cfg = new MapConfig();
-            cfg.map_idx = 0xff;
-            edio.setConfig(cfg);
-            cmd('h');
-            if (edio.rx8() != 0) throw new Exception("Unexpected response at USB halt");
-        }
 
-        void haltExit()
-        {
-            MapConfig cfg = new MapConfig();
-            cfg.map_idx = 0xff;
-            cfg.Ctrl = MapConfig.ctrl_unlock;
-            edio.setConfig(cfg);
-        }
-
-        void mapLoadSDC(int map_id, MapConfig cfg)
+        public void mapLoadSDC(int map_id, MapConfig cfg)
         {
             string map_path = "EDN8/MAPS/";
             int map_pkg;
@@ -295,7 +160,7 @@ namespace edlink_n8
             map_pkg = map_rout[map_id];
             if (map_pkg == 0xff && map_id != 0xff)
             {
-                
+
                 cfg = new MapConfig();
                 cfg.map_idx = 255;
                 cfg.Ctrl = MapConfig.ctrl_unlock;
@@ -311,31 +176,74 @@ namespace edlink_n8
             edio.fpgInit(map_path, cfg);
         }
 
-        static string getTestMapper(int mapper)
+        string getTestPath(string rom_path)
         {
-            string home = "E:/projects/EDN8-PRO/mappers/";
+            string testpath = null;
 
             try
             {
-                home = File.ReadAllText("testpath.txt");
+                testpath = File.ReadAllText("testpath.txt");
             }
-            catch (Exception) { };
+            catch (Exception)
+            {
+
+                try
+                {
+                    testpath = Path.GetDirectoryName(rom_path) + "/testpath.txt";
+                    testpath = testpath.Replace("\\", "/");
+                    testpath = File.ReadAllText(testpath);
+                }
+                catch (Exception)
+                {
+                    return "E:/projects/edn8-pro/fpga";
+                }
+            };
+
+            testpath = testpath.Replace("\\", "/");
+            testpath = testpath.Trim();
+            if (testpath.EndsWith("/"))
+            {
+                testpath = testpath.Substring(0, testpath.Length - 1).Trim();
+            }
+
+            return testpath;
+        }
+
+        public string getTestMapper(int mapper, string rom_path)
+        {
+            string testpath = getTestPath(rom_path);
 
             try
             {
-                string map_path = home;
+                string map_path = testpath;
 
-                byte[] maprout = File.ReadAllBytes(home + "MAPROUT.BIN");
+                byte[] maprout = File.ReadAllBytes(testpath + "/MAPROUT.BIN");
 
                 int pack = maprout[mapper];
-                if (pack == 255 && mapper != 255) throw new Exception("Mapper is not supported");
+                if (pack == 255 && mapper != 255)
+                {
+                    throw new Exception("Mapper is not supported");
+                }
 
 
-                if (pack < 100) map_path += "0";
-                if (pack < 10) map_path += "0";
-                map_path += pack + "/output_files/top.rbf";
+                map_path += "/" + pack.ToString("d3") + "/output_files";
 
-                return map_path;
+                string[] rbf_list = Directory.GetFiles(map_path, "*.rbf");
+
+                if (rbf_list.Length < 1)
+                {
+                    throw new Exception("rbf files not found");
+                }
+
+
+                if (rbf_list.Length > 1)
+                {
+                    Console.WriteLine("WARNING: multiple rbf files found");
+                }
+
+                rbf_list[0] = rbf_list[0].Replace("\\", "/");
+
+                return rbf_list[0];
 
             }
             catch (Exception)
@@ -344,6 +252,19 @@ namespace edlink_n8
             }
         }
 
+        public void reset()
+        {
+            cmd(cmd_reboot);
+            edio.rx8();//exec
+        }
 
+        public void vramDump(byte[] vram, byte[] palette)
+        {
+            edio.fifoWR("*v");
+            edio.rxData(vram, 2048);
+            edio.rxData(palette, 16);
+        }
     }
+
+
 }

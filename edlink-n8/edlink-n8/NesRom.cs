@@ -78,8 +78,8 @@ namespace edlink_n8
                 if (mapper == 255)
                 {
                     rom_type = ROM_TYPE_OS;
-                    prg_addr = Edio.ADDR_OS_PRG;
-                    chr_addr = Edio.ADDR_OS_CHR;
+                    prg_addr = Edio.ADDR_MENU_PRG;
+                    chr_addr = Edio.ADDR_MENU_CHR;
                 }
 
 

@@ -147,7 +147,7 @@ namespace edlink_n8
         }
 
 
-        void testVDC()
+        public void testVDC()
         {
             Vdc vdc;
 
