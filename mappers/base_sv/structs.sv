@@ -95,7 +95,7 @@ typedef struct{
 	
 	//all below located in ce_sys area
 	bit ce_cfg;
-	bit ce_ggc;
+	bit ce_cc;
 	
 	bit ce_sst;
 	

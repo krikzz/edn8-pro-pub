@@ -45,23 +45,23 @@ module map_255(
 	assign mao.map_ppu_oe	= int_ppu_oe | (chr.ce & chr.oe);
 	assign mao.map_ppu_do	= int_ppu_oe ? int_ppu_data : mai.chr_do;
 	//************************************************************* mapper implementation below
-	parameter REG_VRAM_CTRL		= 0;//4registers
-	parameter REG_TIMER			= 4;//2 registers
-	parameter REG_APP_BANK		= 6;
+	parameter REG_VRAM_CTRL	= 0;//4registers
+	parameter REG_TIMER		= 4;//2 registers
+	parameter REG_APP_BANK	= 6;
 	
 	
 	assign prg.ce = rom_area | ram_area | app_area;
 	assign prg.we = (ram_area | app_area) & !cpu.rw;
 	
-	assign prg.addr[22:17] = 6'h3F;//system rom mapped to 0x7E0000
-	assign prg.addr[16:0] = 
+	assign prg.addr[22:17] 	= 6'h3F;//system rom mapped to 0x7E0000
+	assign prg.addr[16:0] 	= 
 	ram_area ? {5'd0, cpu.addr[11:0]} :
 	app_area ? {app_bank[3:0], cpu.addr[12:0]} : 
 	{2'b11, cpu.addr[14:0]};
 	
 	
-	assign chr.ce = !ppu.addr[13];
-	assign chr.we = !ppu.we & ppu_off;
+	assign chr.ce 				= !ppu.addr[13];
+	assign chr.we 				= !ppu.we & ppu_off;
 
 	assign chr.addr[11:0]  	= ppu.addr[11:0];
 	assign chr.addr[13:12] 	= ppu_off ? {1'b0, ppu.addr[12]} : atr_do[3:2];
@@ -105,12 +105,12 @@ module map_255(
 	
 		if(regs_we & bnk_ce)
 		begin
-			app_bank[3:0] <= cpu.data[3:0];
+			app_bank[3:0] 	<= cpu.data[3:0];
 		end
 		
 		if(!cpu.rw & cpu.addr[15:0] == 16'h2001)
 		begin
-			ppu_off <= !cpu.data[3];
+			ppu_off 			<= !cpu.data[3];
 		end
 		
 	end
@@ -179,7 +179,8 @@ module vram(
 	assign cpu_do[7:0] = 
 	ce_addr_lo 	? vram_addr_cpu[7:0] : 
 	ce_addr_hi 	? vram_addr_cpu[15:8] : 
-	ce_data 		? vram_do_cpu[7:0] : 8'h00;
+	ce_data 		? vram_do_cpu[7:0] : atr_do_cpu[3:0];//for screenshots
+	//8'h00;
 	
 	wire [10:0]ppu_atr_addr;
 	wire ppu_atr_ce;

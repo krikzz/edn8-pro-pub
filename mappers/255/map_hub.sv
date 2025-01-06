@@ -1,5 +1,6 @@
 
-
+	`define SST_OFF	//save state
+	`define CCO_OFF	//cheats codes engine
 
 
 module map_hub(

@@ -28,6 +28,7 @@ module chip_mmc1(
 	sst.addr[7:0] == 2 	? reg_cx :
 	sst.addr[7:0] == 3 	? reg_ex :
 	sst.addr[7:0] == 4 	? sreg :
+	sst.addr[7:0] == 5 	? bit_ctr :
 	8'hff;
 	
 	
@@ -59,20 +60,21 @@ module chip_mmc1(
 	reg [2:0]bit_ctr;
 	reg [4:0]sreg;
 	
-	always @(negedge cpu_m2, posedge rst)
+	always @(negedge cpu_m2)
+	if(sst.act)
+	begin
+		if(sst.we_reg & sst.addr[7:0] == 0)reg_8x 	<= sst.dato;
+		if(sst.we_reg & sst.addr[7:0] == 1)reg_ax 	<= sst.dato;
+		if(sst.we_reg & sst.addr[7:0] == 2)reg_cx 	<= sst.dato;
+		if(sst.we_reg & sst.addr[7:0] == 3)reg_ex 	<= sst.dato;
+		if(sst.we_reg & sst.addr[7:0] == 4)sreg 		<= sst.dato;
+		if(sst.we_reg & sst.addr[7:0] == 5)bit_ctr	<= sst.dato;
+	end
+		else
 	if(rst)
 	begin
 		reg_8x		<= 5'b11111;
 		reg_ex[4]	<= 0;//enable ram by defaukt
-	end
-		else
-	if(sst.act)
-	begin
-		if(sst.we_reg & sst.addr[7:0] == 0)reg_8x <= sst.dato;
-		if(sst.we_reg & sst.addr[7:0] == 1)reg_ax <= sst.dato;
-		if(sst.we_reg & sst.addr[7:0] == 2)reg_cx <= sst.dato;
-		if(sst.we_reg & sst.addr[7:0] == 3)reg_ex <= sst.dato;
-		if(sst.we_reg & sst.addr[7:0] == 4)sreg 	<= sst.dato;
 	end
 		else
 	if(!cpu_ce_n & !cpu_rw)

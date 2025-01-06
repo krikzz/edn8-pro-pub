@@ -17,7 +17,7 @@ module chip_mmc3(
 	output ram_ce_n,
 	output ram_we_n,	
 	output prg_ce_n,
-	output [18:13]prg_addr,
+	output [20:13]prg_addr,
 	output [17:10]chr_addr,
 	
 	//extra stuff
@@ -50,11 +50,11 @@ module chip_mmc3(
 	
 	assign prg_ce_n		= !(!cpu_ce_n & cpu_rw);
 	
-	assign prg_addr[18:13]	= 
-	{cpu_a14, cpu_a13} == 0 ? (prg_mod == 0 ? r8001[6][5:0] : 6'b111110) :
-	{cpu_a14, cpu_a13} == 1 ? r8001[7][5:0] :
-	{cpu_a14, cpu_a13} == 2 ? (prg_mod == 1 ? r8001[6][5:0] : 6'b111110) :
-	6'b111111;
+	assign prg_addr[20:13]	= 
+	{cpu_a14, cpu_a13} == 0 ? (prg_mod == 0 ? r8001[6][7:0] : 8'b11111110) :
+	{cpu_a14, cpu_a13} == 1 ? r8001[7][7:0] :
+	{cpu_a14, cpu_a13} == 2 ? (prg_mod == 1 ? r8001[6][7:0] : 8'b11111110) :
+	8'b11111111;
 	
 	assign chr_addr[17:10] 	= 
 	ppu_addr[12:11] == {chr_mod, 1'b0} ? {r8001[0][7:1], ppu_addr[10]} :

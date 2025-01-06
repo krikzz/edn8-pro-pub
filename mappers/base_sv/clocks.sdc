@@ -27,6 +27,8 @@ create_clock -name "clk" -period 20.000ns [get_ports {clk}]
 create_clock -name "spi_clk" -period 20.000ns [get_ports {spi_clk}]
 create_clock -name "m2" -period 500.000ns [get_ports {m2}]
 
+set_false_path -from [get_clocks clk] -to [get_clocks spi_clk]
+set_false_path -from [get_clocks spi_clk] -to [get_clocks clk]
 
 # Automatically constrain PLL and other generated clocks
 derive_pll_clocks -create_base_clocks

@@ -18,9 +18,10 @@ module pi_io_map(
 
 	
 //******** system registers
-	assign map.ce_ggc		= map.ce_sys & pi.addr[15:5]  == 0;//32B 0x1800000 cheat codes
-	assign map.ce_cfg 	= map.ce_sys & pi.addr[15:4]  == 2;//16B 0x1800020 mapper configuration
-	assign map.ce_sst		= map.ce_sys & pi.addr[15:13] == 1;//8K  0x1802000 save state data
+	//assign map.ce_ggc		= map.ce_sys & pi.addr[15:5]  == 0;//32B 0x1800000 cheat codes
+	assign map.ce_cfg 	= map.ce_sys & pi.addr[15:4]  == 2;//16B  0x1800020 mapper configuration
+	assign map.ce_cc		= map.ce_sys & pi.addr[15:8]  == 1;//256B 0x1800100 cheat codes
+	assign map.ce_sst		= map.ce_sys & pi.addr[15:13] == 1;//8K   0x1802000 save state data
 	
 endmodule
 

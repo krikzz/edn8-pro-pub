@@ -4,6 +4,6 @@
 005 mmc5
 021 konami vrc-x (vrc6 snd inclided)
 
-255 system mapper for OS
+255 system mapper for everdrive menu
 
 

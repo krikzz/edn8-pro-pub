@@ -232,6 +232,7 @@ set_global_assignment -name SYSTEMVERILOG_FILE map_hub.sv
 set_global_assignment -name SYSTEMVERILOG_FILE map_005.sv
 set_global_assignment -name SYSTEMVERILOG_FILE snd_mmc5.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../base_sv/top.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ../base_sv/everdrive.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../base_sv/map_255.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../base_sv/map_nom.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../base_sv/dma.sv
@@ -239,8 +240,20 @@ set_global_assignment -name SYSTEMVERILOG_FILE ../base_sv/pi.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../base_sv/base_io.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../base_sv/sys_cfg.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../base_sv/sst.sv
-set_global_assignment -name SYSTEMVERILOG_FILE ../base_sv/ggc.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ../base_sv/cheats.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../base_sv/structs.sv
 set_global_assignment -name SDC_FILE ../base_sv/clocks.sdc
 set_global_assignment -name SYSTEMVERILOG_FILE ../base_sv/defs.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ../base_sv/var.sv
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to rx
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to exp_io[9]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to exp_io[8]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to exp_io[7]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to exp_io[6]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to exp_io[5]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to exp_io[4]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to exp_io[3]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to exp_io[2]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to exp_io[1]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to exp_io[0]
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

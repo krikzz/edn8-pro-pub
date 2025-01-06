@@ -43,7 +43,7 @@ module map_001(//MMC1
 	assign mao.bus_cf 		= 0;//bus conflicts
 //************************************************************* save state regs read
 	assign mao.sst_di[7:0] 	= 
-	sst.addr[7:0] <  127 ? sst_di_mmc :
+	sst.addr[7:0]  < 127 ? sst_di_mmc :
 	sst.addr[7:0] == 127 ? cfg.map_idx : 8'hff;
 //************************************************************* mapper-controlled pins
 	assign srm.ce				= wram_ce | ram_ce_155;

@@ -44,7 +44,7 @@ module chip_vrc4(
 	assign ciram_a10			= mir_mode[1] ? mir_mode[0] : !mir_mode[0] ? ppu_addr[10] : ppu_addr[11];
 	assign chr_ce_n 			= ppu_addr[13];
 	assign prg_ce_n			= !cpu_addr[15];
-	assign wram_ce_n			= !({cpu_addr[15:13], 13'd0} == 16'h6000 & ram_on);
+	assign wram_ce_n			= !({cpu_addr[15:13], 13'd0} == 16'h6000);// & ram_on);
 	assign wr9003_n			= !(cpu_addr[15:0] == 16'h9003 & !cpu_rw);
 	
 	assign chr_addr[18:10]	= chr_reg[ppu_addr[12:10]][8:0];
