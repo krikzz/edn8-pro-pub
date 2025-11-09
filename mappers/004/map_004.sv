@@ -61,7 +61,8 @@ module map_004(//MMC3
 	assign chr.oe 				= !ppu.oe;
 	assign chr.we 				= cfg.chr_ram ? !ppu.we & mao.ciram_ce : 0;
 	assign chr.addr[9:0]		= ppu.addr[9:0];
-	assign chr.addr[17:10]	= cfg.chr_ram ? chr_addr[14:10] : chr_addr[17:10];//ines 2.0 requires 32k ram support
+	//assign chr.addr[17:10]		= cfg.chr_ram ? chr_addr[14:10] : chr_addr[17:10];//ines 2.0 requires 32k ram support
+	assign chr.addr[17:10]		= chr_addr[17:10];
 	
 	//A10-Vmir, A11-Hmir
 	assign mao.ciram_a10 	= ciram_a10;
