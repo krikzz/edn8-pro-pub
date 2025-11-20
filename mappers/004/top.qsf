@@ -236,6 +236,7 @@ set_global_assignment -name SYSTEMVERILOG_FILE map_004.sv
 set_global_assignment -name SYSTEMVERILOG_FILE map_004_s1.sv
 set_global_assignment -name SYSTEMVERILOG_FILE map_004_s3.sv
 set_global_assignment -name SYSTEMVERILOG_FILE map_009.sv
+set_global_assignment -name SYSTEMVERILOG_FILE map_044.sv
 set_global_assignment -name SYSTEMVERILOG_FILE chip_mmc1.sv
 set_global_assignment -name SYSTEMVERILOG_FILE chip_mmc3.sv
 set_global_assignment -name SYSTEMVERILOG_FILE irq_mmc3.sv

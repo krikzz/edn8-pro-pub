@@ -28,7 +28,8 @@ module chip_mmc3(
 	input  cpu_m3,
 	
 	input  SSTBus sst,
-	output [7:0]sst_di
+	output [7:0]sst_di,
+	output [2:0]block_sel
 );
 	
 	assign sst_di[7:0] 	=
@@ -63,6 +64,8 @@ module chip_mmc3(
 	ppu_addr[11:10] == 1 ? r8001[3][7:0] :
 	ppu_addr[11:10] == 2 ? r8001[4][7:0] :
    r8001[5][7:0];
+	
+	assign block_sel[2:0]   = rA001[2:0];
 	
 	wire [3:0]reg_addr	= {!cpu_ce_n, cpu_a14, cpu_a13, cpu_a0};
 	
