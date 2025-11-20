@@ -108,7 +108,8 @@ module map_004(//MMC3
 		.cpu_m3(cpu.m3),
 		
 		.sst(sst),
-		.sst_di(sst_di)
+		.sst_di(sst_di),
+		.block_sel()
 	);
 	
 

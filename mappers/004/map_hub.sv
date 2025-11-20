@@ -13,6 +13,7 @@ module map_hub(
 	mai.cfg.map_idx == 4		? map_out_004 :
 	mai.cfg.map_idx == 9		? map_out_009 :
 	mai.cfg.map_idx == 10	? map_out_009 :
+	mai.cfg.map_idx == 44   ? map_out_044 :
 	mai.cfg.map_idx == 155	? map_out_001 : 
 	map_out_nom;
 	
@@ -34,5 +35,8 @@ module map_hub(
 	
 	MapOut map_out_009;
 	map_009 m009(mai, map_out_009);
+	
+	MapOut map_out_044;
+	map_044 m044(mai, map_out_044);
 	
 endmodule
