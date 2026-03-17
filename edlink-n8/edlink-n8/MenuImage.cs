@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using System.Drawing;
-using System.Security.Policy;
+using SkiaSharp;
 
 namespace edlink_n8
 {
@@ -35,30 +34,24 @@ namespace edlink_n8
 
         public static void makeImage(string path, byte[] chr, byte[] vram, byte[] pal)
         {
-
-
-            Bitmap pic = new Bitmap(screen_w * 8, screen_h * 8);
-
+            var info = new SKImageInfo(screen_w * 8, screen_h * 8, SKColorType.Rgba8888, SKAlphaType.Premul);
+            using var surface = SKSurface.Create(info);
+            var canvas = surface.Canvas;
 
             int[] pal32 = getPal32(pal);
-            //UInt16[] plan_a = getPlan(vram, 0xC000);
-            //UInt16[] plan_b = getPlan(vram, 0xE000);
-
-
             int[] pixels = getPixels(chr, vram);
 
-            renderImg(pic, pal32, pixels);
+            renderImg(canvas, pal32, pixels);
 
             Console.WriteLine("path: " + path);
-            pic.Save(path);
+            using var image = surface.Snapshot();
+            using var data = image.Encode(SKEncodedImageFormat.Png, 100);
+            using var stream = File.Create(path);
+            data.SaveTo(stream);
         }
-
-
 
         static int[] getPixels(byte[] chr, byte[] vram)
         {
-
-            
             int w = screen_w * 8;
             int h = screen_h * 8;
 
@@ -74,7 +67,6 @@ namespace edlink_n8
                 int tile_atr = vram[tile_ptr * 2 + 1];
 
                 pixels[i] = getPixel(chr, tile_idx, tile_atr, x, y);
-                
             }
 
             return pixels;
@@ -103,8 +95,6 @@ namespace edlink_n8
 
             pixel |= (tile_atr & 3) << 2;
 
-
-
             return pixel;
         }
 
@@ -116,20 +106,17 @@ namespace edlink_n8
 
             for (int i = 0; i < pal32.Length; i++)
             {
-
                 int r = pal_nes[pal[i] * 3 + 0];
                 int g = pal_nes[pal[i] * 3 + 1];
                 int b = pal_nes[pal[i] * 3 + 2];
 
                 pal32[i] = alpha | (r << 16) | (g << 8) | (b << 0);
-
             }
-
 
             return pal32;
         }
 
-        static void renderImg(Bitmap pic, int[] pal32, int[] pixels)
+        static void renderImg(SKCanvas canvas, int[] pal32, int[] pixels)
         {
             int w = screen_w * 8;
 
@@ -139,13 +126,10 @@ namespace edlink_n8
                 int y = i / w;
 
                 int rgb = pal32[pixels[i]];
+                var color = new SKColor((uint)rgb);
 
-                pic.SetPixel(x, y, Color.FromArgb(rgb));
+                canvas.DrawPoint(x, y, color);
             }
         }
-
-
-
-
     }
 }
