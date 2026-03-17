@@ -1,5 +1,0 @@
-/Users/lucas/src/edn8-pro-pub/edlink-n8/edlink-n8/obj/Debug/net472/edlink-n8.GeneratedMSBuildEditorConfig.editorconfig
-/Users/lucas/src/edn8-pro-pub/edlink-n8/edlink-n8/obj/Debug/net472/edlink-n8.AssemblyInfoInputs.cache
-/Users/lucas/src/edn8-pro-pub/edlink-n8/edlink-n8/obj/Debug/net472/edlink-n8.AssemblyInfo.cs
-/Users/lucas/src/edn8-pro-pub/edlink-n8/edlink-n8/obj/Debug/net472/edlink-n8.csproj.CoreCompileInputs.cache
-/Users/lucas/src/edn8-pro-pub/edlink-n8/edlink-n8/obj/Debug/net472/edlink-n8.sourcelink.json
