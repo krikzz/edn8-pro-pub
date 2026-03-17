@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "dgSpecHash": "aLJ3xTpd0W4=",
+  "success": true,
+  "projectFilePath": "/Users/lucas/src/edn8-pro-pub/edlink-n8/edlink-n8/edlink-n8.csproj",
+  "expectedPackageFiles": [
+    "/Users/lucas/.nuget/packages/microsoft.win32.systemevents/10.0.0/microsoft.win32.systemevents.10.0.0.nupkg.sha512",
+    "/Users/lucas/.nuget/packages/runtime.android-arm.runtime.native.system.io.ports/10.0.0/runtime.android-arm.runtime.native.system.io.ports.10.0.0.nupkg.sha512",
+    "/Users/lucas/.nuget/packages/runtime.android-arm64.runtime.native.system.io.ports/10.0.0/runtime.android-arm64.runtime.native.system.io.ports.10.0.0.nupkg.sha512",
+    "/Users/lucas/.nuget/packages/runtime.android-x64.runtime.native.system.io.ports/10.0.0/runtime.android-x64.runtime.native.system.io.ports.10.0.0.nupkg.sha512",
+    "/Users/lucas/.nuget/packages/runtime.android-x86.runtime.native.system.io.ports/10.0.0/runtime.android-x86.runtime.native.system.io.ports.10.0.0.nupkg.sha512",
+    "/Users/lucas/.nuget/packages/runtime.linux-arm.runtime.native.system.io.ports/10.0.0/runtime.linux-arm.runtime.native.system.io.ports.10.0.0.nupkg.sha512",
+    "/Users/lucas/.nuget/packages/runtime.linux-arm64.runtime.native.system.io.ports/10.0.0/runtime.linux-arm64.runtime.native.system.io.ports.10.0.0.nupkg.sha512",
+    "/Users/lucas/.nuget/packages/runtime.linux-bionic-arm64.runtime.native.system.io.ports/10.0.0/runtime.linux-bionic-arm64.runtime.native.system.io.ports.10.0.0.nupkg.sha512",
+    "/Users/lucas/.nuget/packages/runtime.linux-bionic-x64.runtime.native.system.io.ports/10.0.0/runtime.linux-bionic-x64.runtime.native.system.io.ports.10.0.0.nupkg.sha512",
+    "/Users/lucas/.nuget/packages/runtime.linux-musl-arm.runtime.native.system.io.ports/10.0.0/runtime.linux-musl-arm.runtime.native.system.io.ports.10.0.0.nupkg.sha512",
+    "/Users/lucas/.nuget/packages/runtime.linux-musl-arm64.runtime.native.system.io.ports/10.0.0/runtime.linux-musl-arm64.runtime.native.system.io.ports.10.0.0.nupkg.sha512",
+    "/Users/lucas/.nuget/packages/runtime.linux-musl-x64.runtime.native.system.io.ports/10.0.0/runtime.linux-musl-x64.runtime.native.system.io.ports.10.0.0.nupkg.sha512",
+    "/Users/lucas/.nuget/packages/runtime.linux-x64.runtime.native.system.io.ports/10.0.0/runtime.linux-x64.runtime.native.system.io.ports.10.0.0.nupkg.sha512",
+    "/Users/lucas/.nuget/packages/runtime.maccatalyst-arm64.runtime.native.system.io.ports/10.0.0/runtime.maccatalyst-arm64.runtime.native.system.io.ports.10.0.0.nupkg.sha512",
+    "/Users/lucas/.nuget/packages/runtime.maccatalyst-x64.runtime.native.system.io.ports/10.0.0/runtime.maccatalyst-x64.runtime.native.system.io.ports.10.0.0.nupkg.sha512",
+    "/Users/lucas/.nuget/packages/runtime.native.system.io.ports/10.0.0/runtime.native.system.io.ports.10.0.0.nupkg.sha512",
+    "/Users/lucas/.nuget/packages/runtime.osx-arm64.runtime.native.system.io.ports/10.0.0/runtime.osx-arm64.runtime.native.system.io.ports.10.0.0.nupkg.sha512",
+    "/Users/lucas/.nuget/packages/runtime.osx-x64.runtime.native.system.io.ports/10.0.0/runtime.osx-x64.runtime.native.system.io.ports.10.0.0.nupkg.sha512",
+    "/Users/lucas/.nuget/packages/system.drawing.common/10.0.0/system.drawing.common.10.0.0.nupkg.sha512",
+    "/Users/lucas/.nuget/packages/system.io.ports/10.0.0/system.io.ports.10.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

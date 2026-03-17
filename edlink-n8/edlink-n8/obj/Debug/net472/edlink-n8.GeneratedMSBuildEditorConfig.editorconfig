@@ -1,0 +1,8 @@
+is_global = true
+build_property.RootNamespace = edlink_n8
+build_property.ProjectDir = /Users/lucas/src/edn8-pro-pub/edlink-n8/edlink-n8/
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.CsWinRTUseWindowsUIXamlProjections = false
+build_property.EffectiveAnalysisLevelStyle = 
+build_property.EnableCodeStyleSeverity = 
