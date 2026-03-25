@@ -121,7 +121,7 @@ module everdrive(
 	sst_ce_cpu		? sst_do[7:0] :
 	cc_ce_cpu		? cc_do[7:0]  ://priority was changed
 	mao.map_cpu_oe	? mao.map_cpu_do[7:0] : 
-	{!cpu_ce, cpu_addr[14:8]};//open bus
+	{!cpu_ce, cpu_dato[7:0]};//open bus
 	
 	assign cpu_dir 			= cart_space & cpu_rw & cpu.m2 ? 1 : 0;// cpu_bus_oe;
 	assign cpu_ex  			= 0;
