@@ -435,16 +435,16 @@ joy_read:
     pha
     lda #$01
     sta JOY_PORT1
-    nop
     lda #$00
     sta JOY_PORT1
-    nop
     ldx #8
 @0:
     asl VAR_JOY_BUF
     lda JOY_PORT1
-    and #1
-    ora VAR_JOY_BUF
+    and #3
+    beq @1
+    lda #1
+@1: ora VAR_JOY_BUF
     sta VAR_JOY_BUF
     dex 
     bne @0
@@ -483,7 +483,27 @@ nsf_init:
     sta VAR_ADDR
     lda NSF_INIT+1
     sta VAR_ADDR+1
-    lda VAR_CUR_SND
+    lda #0 ; clearing ram in $0-7FF, $6000-7FFF
+    tay
+    ldx #$7F
+    sta $00
+    @3:
+    stx $01
+    @0:
+    sta ($00),Y
+    iny
+    bne @0
+    cpx #$60
+    bne @1
+    ldx #$08
+    @1:
+    CPX #$02
+    BNE @2
+    LDX #$01
+    @2:
+    dex
+    bpl @3
+    lda VAR_CUR_SND ; return from init
     ldx #0
     jmp MEM_EXEC
 
